@@ -12,7 +12,7 @@
     "tailwindcss": "^4.1.15"
   },
   "scripts": {
-    "build:css": "npx @tailwindcss/cli -i ./src/input.css -o ./src/output.css --watch",
+    "build:css": "npx @tailwindcss/cli -i .frontend/src/input.css -o .frontend/src/output.css --watch",
     "devStart": "nodemon backend/server.js"
   },
   "devDependencies": {

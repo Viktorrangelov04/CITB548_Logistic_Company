@@ -8,12 +8,16 @@ const router = express.Router();
 
 router.get("/", async (req, res) =>{
     try{
-        const users = await User.find();
+        const {role} = req.query;
+        const users = role ? await User.find({ role }) : await User.find();
+
         res.status(200).json(users);
     }catch(error){
         res.status(500).json({message:"Failed to get users"})
     }
 });
+
+
 
 router.post("/login", async (req, res)=>{
     try{
@@ -43,5 +47,18 @@ router.post("/login", async (req, res)=>{
         res.status(500).json({message:"server error"});
     }
 });
+
+router.post("/register", async(req, res)=>{
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    const newUser = new User({name: req.body.name, email: req.body.email, password: hashedPassword });
+    try{
+        const savedUser = newUser.save();
+        console.log("new user saved to db", savedUser);
+        res.status(201).json({message:"user created successfully", user: savedUser});
+    }catch{
+        console.error("failed to save user", error.message);
+        res.status(500).json({message: "failed to save the user"})
+    }
+})
 
 export default router;

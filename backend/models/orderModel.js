@@ -5,7 +5,10 @@ const orderSchema = new Schema({
     sender:{type:mongoose.Schema.Types.ObjectId, ref: 'User'},
     receiver:{type:mongoose.Schema.Types.ObjectId, ref:'User'},
     employee:{type:mongoose.Schema.Types.ObjectId, ref:'User'},
-    address:{Type: String, required:true},
-    weight: {Type: Number, required:true},
-    status:{type: String, enum:['sent', 'arrived', 'received'], default: 'sent'}
+    adress:{type: String, required: [true, "please enter adress"]},
+    weight: {type: String},
+    status:{type: String, enum:['processing', 'sent', 'arrived', 'received'], default: 'processing'}
 })
+
+const Order = model('Order', orderSchema);
+export default Order;

@@ -1,4 +1,4 @@
-GET http://localhost:3000/users
+GET http://localhost:3000/api/users/?role=Employee
 
 ###
 
@@ -19,4 +19,15 @@ Content-Type:application/json
 {
     "email": "Viktor@gmail.com",
     "password": "123"
+}
+
+###
+POST http://localhost:3000/api/orders/send
+Content-type: application/json
+
+{
+    "sender_id": "68fa57eaa1a3340fa0602112",
+    "receiver_id": "68fa58ff1136ad9d114c4cbc",
+    "adress": "nbu",
+    "weight": "500"
 }

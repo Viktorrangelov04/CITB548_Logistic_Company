@@ -3,21 +3,38 @@ import bcrypt from "bcrypt";
 import User from "../models/userModel.js";
 import express from "express"
 
-
 const router = express.Router();
 
-router.get("/", async (req, res) =>{
+router.get("/:id", async(req, res)=>{
+    const { id } = req.params;
+    if(!id){
+        res.status(400),json({message:"Missing user ID"})
+    }
     try{
-        const {role} = req.query;
+        const user = await User.findByID(id);
+        if(!user){
+            return res.status(404).json({message:"User not found"})
+        }
+        res.status(200).json(user);
+    }catch{
+        res.status(500).json({message:"Server error"})
+    }
+})//Find users by ID
+
+router.get("/", async (req, res) =>{
+    const {role} = req.query;
+    if(!role){
+        return res.status(400).json({message:"Missing user role"})
+    }
+    try{
+        
         const users = role ? await User.find({ role }) : await User.find();
 
         res.status(200).json(users);
     }catch(error){
         res.status(500).json({message:"Failed to get users"})
     }
-});
-
-
+});//Find users by role
 
 router.post("/login", async (req, res)=>{
     try{
@@ -46,7 +63,7 @@ router.post("/login", async (req, res)=>{
         console.error("Login error:", error);
         res.status(500).json({message:"server error"});
     }
-});
+});//Logging in
 
 router.post("/register", async(req, res)=>{
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -59,6 +76,43 @@ router.post("/register", async(req, res)=>{
         console.error("failed to save user", error.message);
         res.status(500).json({message: "failed to save the user"})
     }
-})
+})//creating account
 
+router.put("/:id", async(req, res)=>{
+    const { id } = req.params;
+    const { role } = req.body;
+    if(!id || !role){
+        return res.status(400).json({message:"Missing id or new role"})
+    }
+    try{
+        const result = await db.collection("user").updateOne(
+            {_id: new ObjectId(id)},
+            {$set:{"role":role}}
+        )
+        if(result.matchedCount === 0){
+            return res.status(404).json({message: "User not found"})
+        }
+        res.status(200).json({message: "Role updated successfully"})
+    }catch{
+        res.status(500).json({message:"Server error"})
+    }
+})//editting user role
+
+router.delete("/:id", async(req, res)=>{
+    const { id } = req.params;
+    if(!id){
+        return res.status(400).json({message:"Missing user ID"})
+    }
+    try{
+        const result = await db.collection("user").deleteOne({
+            _id: new ObjectId(id)
+        })
+        if(result.deletedCount === 0){
+            return res.status(404).json("User not found")
+        }
+        res.status(200).json({message:"user deleted successfully"})
+    }catch{
+        res.status(500).json({message: "Server error"})
+    }
+})//Deleting order by ID
 export default router;

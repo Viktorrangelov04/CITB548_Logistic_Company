@@ -5,6 +5,9 @@ const router = express.Router();
 
 router.get("/:id", async(req, res)=>{
     const {id} = req.params;
+    if(!id){
+        return res.status(400).json({message:"Missing order ID"})
+    }
     try{
         const order = await Order.findById(id);
         if(!order){
@@ -14,17 +17,20 @@ router.get("/:id", async(req, res)=>{
     }catch{
         res.status(500).json({message:"Server error"});
     }
-})
+})//Get order by ID
 
 router.get("/", async(req, res)=>{
+    const {status} = res.query;
+    if(!status){
+        return res.status(400).json({message:"Missing new status"})
+    }
     try{
-        const {status} = res.query;
         const orders = role ? await Order.find({status}) : await Order.find();
         res.status(200).json(orders)
     }catch{
         res.status(500).json({message: "failed to get orders"})
     }
-})
+})//Get orders by status
 
 router.post("/", async(req, res) =>{
     const newOrder = new Order({sender: req.body.sender_id, receiver: req.body.receiver_id, adress: req.body.adress, weight: req.body.weight});
@@ -35,7 +41,7 @@ router.post("/", async(req, res) =>{
     }catch{
         res.status(500).json({message: "failed to save order"})
     }
-})
+})//Create order
 
 router.put("/:id", async(req, res)=>{
     const {id} = req.params;
@@ -57,10 +63,13 @@ router.put("/:id", async(req, res)=>{
     }catch{
         res.status(500).json({message: "server error"});
     }
-})
+})//Edit order status
 
 router.delete("/:id", async(req, res)=>{
     const { id } = req.params.id;
+    if(!id){
+        return res.status(400).json({message:"Missing order ID"})
+    }
 
     try{
         const result = await db.collection("order").deleteOne({
@@ -74,5 +83,5 @@ router.delete("/:id", async(req, res)=>{
     }catch{
         res.status(500).json({message: "server error"})
     }
-})
+})//Delete order by ID
 export default router;

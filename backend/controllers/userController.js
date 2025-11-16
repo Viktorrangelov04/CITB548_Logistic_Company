@@ -15,14 +15,16 @@ export const getUserById = async (req, res) => {
 };
 
 export const getUsersByRole = async (req, res) => {
-  const { role } = req.query;
-  if (!role) return res.status(400).json({ message: "Missing user role" });
-
   try {
-    const users = await User.find({ role });
+    const { role } = req.query;
+    const users = role ? await User.find({role}) : await User.find();
     res.status(200).json(users);
   } catch (error) {
-    res.status(500).json({ message: "Failed to get users", error: error.message });
+    console.error(error);
+    res.status(500).json({
+      message: "Failed to get users",
+      error: error.message,
+    });
   }
 };
 

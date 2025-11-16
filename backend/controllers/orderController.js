@@ -1,7 +1,5 @@
 import Order from "../models/orderModel.js";
 
-const router = express.Router();
-
 export const getOrderById = async(req, res) =>{
     const { id } = req.params;
     if(!id) return res.status(400).json({message:"Missing order ID"})

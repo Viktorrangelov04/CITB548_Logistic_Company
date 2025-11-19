@@ -7,7 +7,12 @@ const orderSchema = new Schema({
     employee:{type:mongoose.Schema.Types.ObjectId, ref:'User'},
     adress:{type: String, required: [true, "please enter adress"]},
     weight: {type: String},
-    status:{type: String, enum:['processing', 'sent', 'arrived', 'received'], default: 'processing'}
+    status:{
+        type: String, 
+        enum:['processing', 'sent', 'arrived', 'received'], 
+        default: 'processing', 
+        lowercase:true,
+    }
 })
 
 const Order = model('Order', orderSchema);

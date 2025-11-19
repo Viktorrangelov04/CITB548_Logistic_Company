@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import User from "../models/userModel.js";
+import Company from "../models/companyModel.js";
 
 const generateAccessToken = (user) => {
   return jwt.sign(
@@ -31,15 +32,29 @@ export const register = async (req, res) => {
     });
 
     const savedUser = await newUser.save(); 
-    res.status(201).json({
-      message: "User created successfully",
-      user: savedUser,
-    });
+    res.status(201).json({message: "User created successfully", user: savedUser,});
   } catch (error) {
     console.error("Failed to save user:", error.message);
     res.status(500).json({ message: "Failed to save the user" });
   }
 };
+
+export const registerCompany = async(req, res) =>{
+    try{
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    const newCompany = new Company({
+        name: req.body.name,
+        email: req.body.email,
+        password: hashedPassword,
+    })
+
+    const savedCompany = await newCompany.save();
+    res.status(201).json({message: "Company created successfully", company: savedCompany})
+    }catch(error){
+        console.error("Failed to save company:", error.message);
+        res.status(500).json({ message: "Failed to save the company" });
+    }
+}
 
 export const login = async (req, res) => {
   try {

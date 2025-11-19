@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import { connectDB, disconnectDB } from "../backend/database/connection.js";
 

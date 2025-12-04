@@ -21,7 +21,7 @@ export const getOrderByStatus = async(req, res) =>{
 
         res.status(200).json(orders)
     }catch(err){
-        console.error("ACTUAL ERROR in getOrderByStatus:", err);
+        console.error("Error:", err);
         res.status(500).json({message: "failed to get orders"})
     }
 }

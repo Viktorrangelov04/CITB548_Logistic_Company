@@ -27,7 +27,7 @@ export const getOffices = async(req, res) => {
 }
 
 export const createOffice = async(req, res)=>{
-    const newOffice = new Office({adress: req.body.address, company:req.body.company})
+    const newOffice = new Office({address: req.body.address, company:req.body.company})
     try{
         const savedOffice=await newOffice.save();
         res.status(201).json({message: "Office saved successfully", savedOffice});
@@ -40,13 +40,14 @@ export const editOfficeAddress = async(req, res)=>{
     const { id } = req.params;
     const { address } = req.body;
     if(!id || !address ){
-        res.status(400).json({message: "missing ID or address"})
+        return res.status(400).json({message: "missing ID or address"})
     }
     try{
         const result = await Office.findByIdAndUpdate(id, { address }, { new: true });
         if (!result) return res.status(404).json({ message: "Office not found" });
+        return res.status(200).json(result);
     }catch{
-        res.status(500).json({message: "Server error"})
+        return res.status(500).json({message: "Server error"})
     }
 }
 

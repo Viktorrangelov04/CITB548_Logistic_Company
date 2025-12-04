@@ -28,8 +28,6 @@ export const deleteCompany = async(req, res) =>{
     try {
         console.log("Deleting company ID:", req.params.id);
         const company = await Company.findByIdAndDelete(req.params.id);
-        console.log("Deleted company?", company);
-
     if (!company) {
       return res.status(404).json({ message: "Company not found" });
     }

@@ -50,7 +50,6 @@ describe("Order routes", ()=>{
             expect(updateRes.body.status).toBe("sent");
 
             await request(app).delete(`/orders/${createdOrder._id}`).expect(200);
-
             await request(app).get(`/orders/${createdOrder._id}`).expect(404);
         })
     })

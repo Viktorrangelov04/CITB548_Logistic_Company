@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import User from "../models/userModel.js";
 import Company from "../models/companyModel.js";
 
+
 const generateAccessToken = (user) => {
   return jwt.sign(
     { id: user._id, role: user.role },
@@ -17,7 +18,6 @@ const generateRefreshToken = (user) => {
     process.env.REFRESH_SECRET,
     { expiresIn: "7d" }
   );
-  refreshTokens.push(refreshToken);
   return refreshToken;
 };
 
@@ -66,19 +66,26 @@ export const login = async (req, res) => {
     if (!isMatch)
       return res.status(401).json({ message: "Wrong password" });
 
-    const token = jwt.sign(
-      { id: user._id, email: user.email },
-      process.env.JWT_SECRET,
-      { expiresIn: "1h" }
-    );
+    const accessToken = generateAccessToken(user);
+    const refreshToken = generateRefreshToken(user);
 
-    res.cookie("token", token, {
+    res.cookie("accessToken", accessToken, {
       httpOnly: true,
       sameSite: "Lax",
-      maxAge: 3600000,
+      maxAge:  15*60*1000, //15 minutes
     });
 
-    res.status(200).json({ message: "Login successful", token });
+    res.cookie("refreshToken", refreshToken,{
+      httpOnly:true,
+      sameSite: "Lax",
+      maxAge: 7*24*60*60*1000, //7 days
+    })
+
+    res.status(200).json({
+      message: "Login successful",
+      accessToken,
+      refreshToken,
+    });
   } catch (error) {
     console.error("Login error:", error);
     res.status(500).json({ message: "Server error" });
@@ -86,13 +93,19 @@ export const login = async (req, res) => {
 };
 
 export const refresh = (req, res) => {
-  const { token } = req.body;
-  if (!token || !refreshTokens.includes(token))
-    return res.status(403).json({ message: "Access denied" });
+  const refreshToken = req.cookies.refreshToken;
+  if(!refreshToken) return res.status(403).json({message: "No refresh token"})
 
-  jwt.verify(token, process.env.REFRESH_SECRET, (err, user) => {
+  jwt.verify(refreshToken, process.env.REFRESH_SECRET, (err, user) => {
     if (err) return res.status(403).json({ message: "Invalid refresh token" });
     const accessToken = generateAccessToken(user);
+
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      sameSite: "Lax",
+      maxAge: 15 * 60 * 1000,
+    });
+
     res.json({ accessToken });
   });
 };

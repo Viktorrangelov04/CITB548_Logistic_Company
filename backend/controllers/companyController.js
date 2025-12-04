@@ -25,15 +25,17 @@ export const getCompanies = async(req,res) =>{
 }
 
 export const deleteCompany = async(req, res) =>{
-    const { id } = req.params;
-    if(!id) return res.status(404).json({message: "Missing company ID"});
-    try{
-        const result = Company.findByIdAndDelete(id);
-        if(!result) return res.status(404).json({message:"Company not found"})
-        res.status(200).json({message:"Company deleted successfully"})
-    }catch{
-        res.status(500).json({message:"Server error"})
+    try {
+        console.log("Deleting company ID:", req.params.id);
+        const company = await Company.findByIdAndDelete(req.params.id);
+    if (!company) {
+      return res.status(404).json({ message: "Company not found" });
     }
+
+    res.status(200).json({ message: "Company deleted" });
+  } catch {
+    res.status(500).json({ message: "Server error" });
+  }
 }
 
 export const changeUserRole = async (req, res) => {

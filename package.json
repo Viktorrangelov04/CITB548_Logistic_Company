@@ -16,7 +16,8 @@
   "scripts": {
     "build:css": "npx @tailwindcss/cli -i .frontend/src/input.css -o .frontend/src/output.css --watch",
     "devStart": "nodemon backend/server.js",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand",
+    "test:company": "jest backend_test/controllers/companyController.test.js --runInBand"
   },
   "devDependencies": {
     "jest": "^30.2.0",

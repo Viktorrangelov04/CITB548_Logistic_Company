@@ -15,14 +15,13 @@ export const getOrderById = async(req, res) =>{
 }
 
 export const getOrderByStatus = async(req, res) =>{
-    const {status} = res.query;
-    if(!status){
-        return res.status(400).json({message:"Missing new status"})
-    }
+    const {status} = req.query;
     try{
-        const orders = role ? await Order.find({status}) : await Order.find();
+        const orders = status ? await Order.find({status}) : await Order.find();
+
         res.status(200).json(orders)
-    }catch{
+    }catch(err){
+        console.error("Error:", err);
         res.status(500).json({message: "failed to get orders"})
     }
 }
@@ -31,7 +30,6 @@ export const createOrder = async(req, res) =>{
     const newOrder = new Order({sender: req.body.sender_id, receiver: req.body.receiver_id, adress: req.body.adress, weight: req.body.weight});
     try{
         const savedOrder = await newOrder.save();
-        console.log("new order saved", savedOrder);
         res.status(201).json({msasage: "order saved successfully", order:savedOrder})
     }catch{
         res.status(500).json({message: "failed to save order"})
@@ -47,35 +45,38 @@ export const editOrderStatus = async(req, res)=>{
     }
 
     try{
-        const result = await db.collection('order').updateOne(
-            {_id: new ObjectId(id)},
-            {$set:{'status':status}}
-        )
-        if(result.matchedCount === 0){
-            return res.status(404).json({message: "Order not found"})
+        const updatedOrder = await Order.findByIdAndUpdate(
+            id,
+            { status },
+            { new: true }
+        );
+        if (!updatedOrder) {
+            return res.status(404).json({ message: "Order not found" });
         }
-        res.status(200).json({message: "Status updated successfully"})
-    }catch{
-        res.status(500).json({message: "server error"});
+
+        res.status(200).json(updatedOrder);
+    }catch (err) {
+        console.error("Failed to edit order:", err.message);
+        res.status(500).json({ message: "Server error" });
     }
 }
 
 export const deleteOrder = async(req,res) =>{
-    const { id } = req.params.id;
+    const { id } = req.params;
     if(!id){
         return res.status(400).json({message:"Missing order ID"})
     }
 
     try{
-        const result = await db.collection("order").deleteOne({
-            _id: new ObjectId(id),
-        });
-        if(result.deletedCount === 0){
-            return res.status(404).json({ message: "Order not found"});
+        const deletedOrder = await Order.findByIdAndDelete(id);
+
+        if (!deletedOrder) {
+            return res.status(404).json({ message: "Order not found" });
         }
 
-        res.status(200).json({message: "order deleted successfully"})
-    }catch{
-        res.status(500).json({message: "server error"})
+        res.status(200).json({ message: "Order deleted successfully" });
+    }catch(err){
+        console.error("Failed to delete order:", err.message);
+        res.status(500).json({ message: "Server error" });
     }
 }

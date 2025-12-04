@@ -1,5 +1,4 @@
 import express from "express";
-import Order from "../models/orderModel.js";
 import { getOrderById, getOrderByStatus, createOrder, editOrderStatus, deleteOrder } from "../controllers/orderController.js";
 
 const router = express.Router();

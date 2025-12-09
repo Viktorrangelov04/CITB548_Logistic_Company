@@ -4,6 +4,7 @@
   "dependencies": {
     "@tailwindcss/cli": "^4.1.15",
     "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
@@ -14,7 +15,7 @@
     "tailwindcss": "^4.1.15"
   },
   "scripts": {
-    "build:css": "npx @tailwindcss/cli -i .frontend/src/input.css -o .frontend/src/output.css --watch",
+    "build:css": "npx @tailwindcss/cli -i frontend/public/src/input.css -o frontend/public/src/output.css --watch",
     "devStart": "nodemon backend/server.js",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand",
     "test:company": "jest backend_test/controllers/companyController.test.js --runInBand"

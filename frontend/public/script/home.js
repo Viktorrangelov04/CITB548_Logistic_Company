@@ -1,3 +1,5 @@
+// import fetchOrders from "fetchOrders.js";
+
 async function displayUserName(){
     try{
         const response = await fetch("http://localhost:3000/auth/me", {
@@ -33,4 +35,5 @@ async function displayUserName(){
 
 document.addEventListener("DOMContentLoaded", ()=>{
     displayUserName();
+    // fetchOrders();
 })

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="src/output.css" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>Welcome to your Dashboard!</h1>
+        <p>Hello, <span id="userNameDisplay">Guest</span>!</p>
+    </header>
+    <article>
+        <h1>Orders</h1>
+        <h3>By types</h3>
+        <label for="allOrders">All</label>
+        <input type="radio" id="allOrders" name = "orderTypes" value="all">
+        <label for="sentOrders">Sent</label>
+        <input type="radio" id="sentOrders" name = "orderTypes" value = "sent">
+        <label for="receivedOrders">Received</label>
+        <input type="radio" id="receivedOrders" name = "orderTypes" value="received">
+        <h3>By status</h3>
+        <label for="pendingOrders">Pending</label>
+        <input type="radio" id="pendingOrders" name = "orderStatus" value="pending">
+        <label for="sentOrders">Shipping</label>
+        <input type="radio" id="shippingOrders" name = "orderStatus" value = "shipping">
+        <label for="receivedOrders">Delivered</label>
+        <input type="radio" id="deliveredOrders" name = "orderStatus" value="delivered">
+        <label for="pickedUpOrders">picked up</label>
+        <input type="radio" id="pickedUpOrders" name="orderStatus" value="pickedUp">
+
+    </article>
+    <script src = "script/home.js"></script>
+</body>
+</html>

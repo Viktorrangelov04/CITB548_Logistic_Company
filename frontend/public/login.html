@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="src/output.css" rel="stylesheet">
+</head>
+<body>
+    <h1 class = "text-3xl text-center my-8">Login</h1>
+
+    <form class="text-center">
+        <label for="email" class="block">Email</label>
+        <input type = "text" id ="email" name = "email" class ="border-1 border-black">
+        <label for="password" class="block">Password</label>
+        <input type = "text" id ="password" name = "password" class ="border-1 border-black">
+        <div>
+          <input
+            type="radio"
+            id="userAccount"
+            name="accountType"
+            value="user"
+            checked
+          />
+          <label for="userAccount">Personal User</label>
+        </div>
+        <div>
+          <input
+            type="radio"
+            id="companyAccount"
+            name="accountType"
+            value="company"
+          />
+          <label for="companyAccount">Company Account</label>
+        </div>
+        <div><p class="inline">Don't have an account?</p><a href="register.html" class="text-blue-300 hover:underline"> register</a></div>
+        <button type = "button" id="loginButton" name="loginButton" class ="py-2 px-8 my-8 rounded-md bg-blue-500 block mx-auto">Login</button>
+    </form>
+    <p id="message"></p>
+    <script src = script/login.js></script>
+</body>
+</html>

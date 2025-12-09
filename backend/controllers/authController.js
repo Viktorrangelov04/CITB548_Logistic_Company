@@ -3,21 +3,50 @@ import bcrypt from "bcrypt";
 import User from "../models/userModel.js";
 import Company from "../models/companyModel.js";
 
-const generateAccessToken = (user) => {
+const JWT_SECRET = process.env.JWT_SECRET;
+const REFRESH_SECRET =process.env.REFRESH_SECRET 
+
+const generateAccessToken =(entity, type) => {
   return jwt.sign(
-    { id: user._id, role: user.role },
-    process.env.JWT_SECRET,
+    { id: entity._id, type: type }, 
+    JWT_SECRET,
     { expiresIn: "15m" }
   );
 };
 
-const generateRefreshToken = (user) => {
-  const refreshToken = jwt.sign(
-    { id: user._id },
-    process.env.REFRESH_SECRET,
+const generateRefreshToken = (entity, type) => {
+  return jwt.sign(
+    { id: entity._id, type: type }, 
+    REFRESH_SECRET,
     { expiresIn: "7d" }
   );
-  return refreshToken;
+};
+
+export const getMe = async (req, res) => {
+  try {
+    let entity;
+    if (req.entity.type === "user") {
+      entity = await User.findById(req.entity.id).select("-password"); 
+    } else if (req.entity.type === "company") {
+      entity = await Company.findById(req.entity.id).select("-password"); 
+    } else {
+      return res.status(400).json({ message: "Unknown entity type in token" });
+    }
+
+    if (!entity) {
+      return res.status(404).json({ message: "User or Company not found" });
+    }
+    
+    res.status(200).json({
+      id: entity._id,
+      name: entity.name || entity.companyName, 
+      email: entity.email,
+      role: req.entity.type, 
+    });
+  } catch (error) {
+    console.error("Error in getMe controller:", error); 
+    res.status(500).json({ message: "Server error" });
+  }
 };
 
 export const register = async (req, res) => {
@@ -64,18 +93,18 @@ export const login = async (req, res) => {
     if (!isMatch)
       return res.status(401).json({ message: "Wrong password" });
 
-    const accessToken = generateAccessToken(user);
-    const refreshToken = generateRefreshToken(user);
+    const accessToken = generateAccessToken(user, "user");
+    const refreshToken = generateRefreshToken(user, "user");
 
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
-      sameSite: "Lax",
+      // sameSite: "Lax",
       maxAge:  15*60*1000, //15 minutes
     });
 
     res.cookie("refreshToken", refreshToken,{
       httpOnly:true,
-      sameSite: "Lax",
+      // sameSite: "Lax",
       maxAge: 7*24*60*60*1000, //7 days
     })
 
@@ -133,8 +162,8 @@ export const loginCompany = async(req, res)=>{
     if(!isMatch)
       return res.status(401).json({message:"Wrong password"});
 
-    const accessToken = generateAccessToken(company);
-    const refreshToken = generateRefreshToken(company);
+    const accessToken = generateAccessToken(company, "company");
+    const refreshToken = generateRefreshToken(company, "company");
 
     es.cookie("accessToken", accessToken, {
       httpOnly: true,

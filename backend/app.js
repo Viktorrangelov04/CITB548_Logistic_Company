@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
-
+import cookieParser from "cookie-parser";
 import userRoutes from "./routes/userRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
@@ -17,8 +17,14 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-app.use(cors());
+const corsOptions = {
+  origin: "http://localhost:5500", 
+  credentials: true, 
+};
+app.use(cors(corsOptions));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use("/users", userRoutes);
 app.use("/orders", orderRoutes);
 app.use("/auth", authRoutes);

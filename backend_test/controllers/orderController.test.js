@@ -45,9 +45,9 @@ describe("Order routes", ()=>{
 
             const updateRes = await request(app)
                 .put(`/orders/${createdOrder._id}`)
-                .send({status:"sent"})
+                .send({status:"shipping"})
                 .expect(200);
-            expect(updateRes.body.status).toBe("sent");
+            expect(updateRes.body.status).toBe("shipping");
 
             await request(app).delete(`/orders/${createdOrder._id}`).expect(200);
             await request(app).get(`/orders/${createdOrder._id}`).expect(404);

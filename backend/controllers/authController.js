@@ -27,7 +27,9 @@ export const getMe = async (req, res) => {
     let entity;
     if (req.entity.type === "user") {
       entity = await User.findById(req.entity.id).select("-password"); 
-    } else if (req.entity.type === "company") {
+    }else if(req.entity.type ==="employee"){
+      entity = await User.findById(req.entity.id).select("-password"); 
+    }else if (req.entity.type === "company") {
       entity = await Company.findById(req.entity.id).select("-password"); 
     } else {
       return res.status(400).json({ message: "Unknown entity type in token" });

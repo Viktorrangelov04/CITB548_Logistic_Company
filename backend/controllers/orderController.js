@@ -1,50 +1,97 @@
 import Order from "../models/orderModel.js";
 
-export const getOrderById = async(req, res) =>{
+export const getOrderById = async (req, res) => {
     const { id } = req.params;
-    if(!id) return res.status(400).json({message:"Missing order ID"})
-    
-    try{
+    if (!id) return res.status(400).json({ message: "Missing order ID" });
+
+    try {
         const order = await Order.findById(id);
-        if(!order) return res.status(404).json({message: "Order not found"});
+        if (!order) return res.status(404).json({ message: "Order not found" });
 
         res.status(200).json(order);
-    }catch{
-        res.status(500).json({message:"Server error"});
+    } catch {
+        res.status(500).json({ message: "Server error" });
     }
-}
+};
 
-export const getOrderByStatus = async(req, res) =>{
-    const {status} = req.query;
-    try{
-        const orders = status ? await Order.find({status}) : await Order.find();
+export const getOrders = async (req, res) => {
+  try {
+    const currentUserId = req.entity.id;
+    const userRole = req.entity.type;
+    const status = req.query.status; 
+    const type = req.query.type;
 
-        res.status(200).json(orders)
-    }catch(err){
-        console.error("Error:", err);
-        res.status(500).json({message: "failed to get orders"})
+    let query = {};
+
+    if (userRole === 'employee') {
+      if (status) {
+        query.status = status;
+      }
+    } else if (userRole === 'user') { 
+      const userSpecificConditions = [];
+
+      if (type === 'sent') {
+        userSpecificConditions.push({ sender: currentUserId });
+      } else if (type === 'received') {
+        userSpecificConditions.push({ receiver: currentUserId });
+      } else { 
+        userSpecificConditions.push({ sender: currentUserId });
+        userSpecificConditions.push({ receiver: currentUserId });
+      }
+
+      if (userSpecificConditions.length > 0) {
+        query.$or = userSpecificConditions;
+      }
+
+      if (status) {
+        query.status = status; 
+      }
+    } else {
+      return res.status(403).json({ message: 'Unauthorized role to view orders' });
     }
-}
 
-export const createOrder = async(req, res) =>{
-    const newOrder = new Order({sender: req.body.sender_id, receiver: req.body.receiver_id, adress: req.body.adress, weight: req.body.weight});
-    try{
+    const orders = await Order.find(query)
+      .populate('sender', 'name email')
+      .populate('receiver', 'name email');
+
+    if (!orders || orders.length === 0) {
+      return res.status(404).json({ message: 'No orders found.' });
+    }
+
+    res.status(200).json(orders);
+  } catch (error) {
+    console.error('Error fetching orders:', error);
+    res.status(500).json({ message: 'Internal server error.' });
+  }
+};
+
+export const createOrder = async (req, res) => {
+    const newOrder = new Order({
+        sender: req.body.sender_id,
+        receiver: req.body.receiver_id,
+        adress: req.body.adress,
+        weight: req.body.weight,
+    });
+    try {
         const savedOrder = await newOrder.save();
-        res.status(201).json({msasage: "order saved successfully", order:savedOrder})
-    }catch{
-        res.status(500).json({message: "failed to save order"})
+        res.status(201).json({
+            msasage: "order saved successfully",
+            order: savedOrder,
+        });
+    } catch {
+        res.status(500).json({ message: "failed to save order" });
     }
-}
+};
 
-export const editOrderStatus = async(req, res)=>{
-    const {id} = req.params;
-    const {status} = req.body;
+export const editOrderStatus = async (req, res) => {
+    const { id } = req.params;
+    const { status } = req.body;
 
     if (!id || !status) {
-    return res.status(400).json({ message: "Missing order ID or status" });
+        return res.status(400).json({ message: "Missing order ID or status" });
     }
 
-    try{
+    try {
         const updatedOrder = await Order.findByIdAndUpdate(
             id,
             { status },
@@ -55,19 +102,19 @@ export const editOrderStatus = async(req, res)=>{
         }
 
         res.status(200).json(updatedOrder);
-    }catch (err) {
+    } catch (err) {
         console.error("Failed to edit order:", err.message);
         res.status(500).json({ message: "Server error" });
     }
-}
+};
 
-export const deleteOrder = async(req,res) =>{
+export const deleteOrder = async (req, res) => {
     const { id } = req.params;
-    if(!id){
-        return res.status(400).json({message:"Missing order ID"})
+    if (!id) {
+        return res.status(400).json({ message: "Missing order ID" });
     }
 
-    try{
+    try {
         const deletedOrder = await Order.findByIdAndDelete(id);
 
         if (!deletedOrder) {
@@ -75,8 +122,8 @@ export const deleteOrder = async(req,res) =>{
         }
 
         res.status(200).json({ message: "Order deleted successfully" });
-    }catch(err){
+    } catch (err) {
         console.error("Failed to delete order:", err.message);
         res.status(500).json({ message: "Server error" });
     }
-}
+};

@@ -1,0 +1,53 @@
+#order-list {
+    display: grid; 
+    grid-template-columns: 1fr;
+    max-width: 1200px; 
+    margin-left: auto; 
+    margin-right: auto;
+    gap: 20px; 
+}
+
+.order-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease-in-out;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.order-item:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.order-item p {
+    margin: 5px 0;
+    line-height: 1.5;
+}
+
+.order-item strong {
+    color: #0056b3;
+}
+
+.order-item p:last-child {
+    font-weight: bold;
+    color: #007bff; 
+}
+
+.order-icon {
+    flex-shrink: 0;
+    margin-right: 15px;
+    padding: 10px;
+    width: 120px; 
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed #ccc;
+    border-radius: 5px;
+}

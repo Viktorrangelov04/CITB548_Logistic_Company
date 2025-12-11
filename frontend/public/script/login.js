@@ -41,8 +41,11 @@ async function login(){
         messageElement.textContent = json.message || "Login successful!";
         messageElement.style.color = "green";
 
-        console.log(json);
-        window.location.href = "/frontend/public/home.html";
+        if(accountType==="user"){
+            window.location.href = "/frontend/public/home.html";
+        }else if(accountType==="company"){
+            window.location.href="/frontend/public/homeAdmin.html";
+        }
         }catch(error){
             const messageElement = document.getElementById("message");
             messageElement.textContent="An unexpected error ocurred";

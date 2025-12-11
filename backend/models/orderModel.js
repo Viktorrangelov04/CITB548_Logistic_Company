@@ -9,7 +9,7 @@ const orderSchema = new Schema({
     weight: {type: String},
     status:{
         type: String, 
-        enum:['processing', 'sent', 'arrived', 'received'], 
+        enum:['processing', 'shipping', 'delivered', 'received'], 
         default: 'processing', 
         lowercase:true,
     }

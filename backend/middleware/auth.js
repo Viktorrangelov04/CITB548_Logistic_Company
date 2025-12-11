@@ -15,7 +15,6 @@ export const verifyToken = (req, res, next) => {
       accessToken,
       process.env.JWT_SECRET
     );
-
     req.entity = decoded; 
     next();
   } catch (err) {

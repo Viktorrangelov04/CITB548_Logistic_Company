@@ -4,33 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link href="src/output.css" rel="stylesheet">
+    <link href="css/output.css" rel="stylesheet">
+    <link href="css/jsstyles.css" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <h1>Welcome to your Dashboard!</h1>
-        <p>Hello, <span id="userNameDisplay">Guest</span>!</p>
-    </header>
-    <article>
+    <div class="bg-blue-500">
+        <header class="w-4/5 mx-auto py-8 ">
+            <div class="flex justify-between align-center"></div>
+                <div>
+                    <h1>Welcome to your Dashboard!</h1>
+                    <p>Hello, <span id="userNameDisplay">Guest</span>!</p>
+                </div>
+                <nav>
+                    <a href="sendOrder.html" class="p-4 border-2 border-black hover:bg-green-500">Send Order</a>
+                </nav>
+            </div>
+        </header>
+    </div>
+    
+    <div id="orders-page" class="w-4/5 mx-auto text-center">
         <h1>Orders</h1>
-        <h3>By types</h3>
-        <label for="allOrders">All</label>
-        <input type="radio" id="allOrders" name = "orderTypes" value="all">
-        <label for="sentOrders">Sent</label>
-        <input type="radio" id="sentOrders" name = "orderTypes" value = "sent">
-        <label for="receivedOrders">Received</label>
-        <input type="radio" id="receivedOrders" name = "orderTypes" value="received">
-        <h3>By status</h3>
-        <label for="pendingOrders">Pending</label>
-        <input type="radio" id="pendingOrders" name = "orderStatus" value="pending">
-        <label for="sentOrders">Shipping</label>
-        <input type="radio" id="shippingOrders" name = "orderStatus" value = "shipping">
-        <label for="receivedOrders">Delivered</label>
-        <input type="radio" id="deliveredOrders" name = "orderStatus" value="delivered">
-        <label for="pickedUpOrders">picked up</label>
-        <input type="radio" id="pickedUpOrders" name="orderStatus" value="pickedUp">
 
-    </article>
+        <div id="filters">
+            <div id="type-filters" style="display: none;">
+                <h3>By types</h3>
+                <label><input type="radio" name="orderType" value="all" checked /> All</label>
+                <label><input type="radio" name="orderType" value="sent" /> Sent</label>
+                <label><input type="radio" name="orderType" value="received" /> Received</label>
+            </div>
+
+            <div id="status-filters">
+                <h3>By status</h3>
+                <label><input type="radio" name="orderStatus" value="all" checked /> All</label>
+                <label><input type="radio" name="orderStatus" value="processing" /> Processing</label>
+                <label><input type="radio" name="orderStatus" value="shipping" /> Shipping</label>
+                <label><input type="radio" name="orderStatus" value="delivered" /> Delivered</label>
+                <label><input type="radio" name="orderStatus" value="pickedUp" /> Picked Up</label>
+            </div>
+
+        <button id="applyFiltersBtn">Apply Filters</button>
+  </div>
+
+  <div id="order-list" class="my-4">
+    <!-- Orders will be displayed here -->
+  </div>
+
+</div>
     <script src = "script/home.js"></script>
 </body>
 </html>

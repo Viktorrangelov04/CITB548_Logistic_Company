@@ -15,7 +15,7 @@
     "tailwindcss": "^4.1.15"
   },
   "scripts": {
-    "build:css": "npx @tailwindcss/cli -i frontend/public/src/input.css -o frontend/public/src/output.css --watch",
+    "build:css": "npx @tailwindcss/cli -i frontend/public/css/input.css -o frontend/public/css/output.css --watch",
     "devStart": "nodemon backend/server.js",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand",
     "test:company": "jest backend_test/controllers/companyController.test.js --runInBand"

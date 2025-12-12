@@ -63,8 +63,8 @@ export const register = async (req, res) => {
 
     const savedUser = await newUser.save(); 
 
-    const accessToken = generateAccessToken(savedUser);
-    const refreshToken = generateRefreshToken(savedUser);
+    const accessToken = generateAccessToken(newUser, newUser.role);
+    const refreshToken = generateRefreshToken(newUser, newUser.role);
 
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
@@ -95,8 +95,8 @@ export const login = async (req, res) => {
     if (!isMatch)
       return res.status(401).json({ message: "Wrong password" });
 
-    const accessToken = generateAccessToken(user, "user");
-    const refreshToken = generateRefreshToken(user, "user");
+    const accessToken = generateAccessToken(user, user.role);
+    const refreshToken = generateRefreshToken(user, user.role);
 
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
@@ -167,7 +167,7 @@ export const loginCompany = async(req, res)=>{
     const accessToken = generateAccessToken(company, "company");
     const refreshToken = generateRefreshToken(company, "company");
 
-    es.cookie("accessToken", accessToken, {
+    res.cookie("accessToken", accessToken, {
       httpOnly: true,
       sameSite: "Lax",
       maxAge:  15*60*1000, //15 minutes

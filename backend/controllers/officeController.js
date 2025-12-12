@@ -27,7 +27,7 @@ export const getOffices = async(req, res) => {
 }
 
 export const createOffice = async(req, res)=>{
-    const newOffice = new Office({address: req.body.address, company:req.body.company})
+    const newOffice = new Office({address: req.body.address, company:req.entity.id})
     try{
         const savedOffice=await newOffice.save();
         res.status(201).json({message: "Office saved successfully", savedOffice});

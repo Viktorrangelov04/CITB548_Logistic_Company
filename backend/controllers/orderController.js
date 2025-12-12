@@ -71,7 +71,18 @@ export const createOrder = async (req, res) => {
         receiver: req.body.receiver_id,
         adress: req.body.adress,
         weight: req.body.weight,
+        type: req.body.type,
     });
+    if(newOrder.type="office"){
+        newOrder.price=newOrder.weight/200
+    }else if(newOrder.type="adress"){
+        newOrder.price=newOrder.weight/175
+    }else{
+        return res.status(400).json({
+        message: "Invalid or missing order type. Type must be 'office' or 'adress'.",
+        });
+    }
+    
     try {
         const savedOrder = await newOrder.save();
         res.status(201).json({

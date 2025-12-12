@@ -30,6 +30,7 @@ export const getUsersByRole = async (req, res) => {
 export const updateUserRole = async (req, res) => {
   const { id } = req.params;
   const { role } = req.body;
+  
 
   if (!id || !role) return res.status(400).json({ message: "Missing id or new role" });
 

@@ -3,27 +3,43 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Document</title>
+        <title>Register</title>
         <link href="css/output.css" rel="stylesheet" />
+        <link rel="icon" type="image/x-icon" href="boxImage.png">
     </head>
     <body>
+        <div class="bg-blue-500">
+        <header class="w-4/5 mx-auto py-8 flex justify-between">
+            <div>
+                <h1 class="text-2xl">Welcome to the Register Portal!</h1>
+                
+            </div>
+            <nav>
+            <a href="login.html" class="px-8 py-2 border-1 border-black rounded-md hover:bg-green-500">Already have an account? Login!</a>
+            <a href="index.html" class="px-8 py-2 border-1 border-black rounded-md hover:bg-green-500">Return to Index</a>
+            </nav>
+        </header>
+        </div>
         <h1 class="text-3xl text-center my-8">Register</h1>
 
         <form class="text-center">
             <div>
                 <label for="email" class="block">Email</label>
                 <input
-                    type="text"
+                    type="email"
                     id="email"
                     name="email"
                     class="border-1 border-black"
+                    placeholder="mail@example.com"
+                    required
                 />
                 <label for="password" class="block">Password</label>
                 <input
-                    type="text"
+                    type="password"
                     id="password"
                     name="password"
                     class="border-1 border-black"
+                    required
                 />
                 <label for="name" class="block">Name</label>
                 <input
@@ -31,6 +47,7 @@
                     id="name"
                     name="name"
                     class="border-1 border-black"
+                    required
                 />
                 <div>
                     <input
@@ -54,20 +71,21 @@
                 <div>
                     <p class="inline">Already have an account?</p>
                     <a href="login.html" class="text-blue-300 hover:underline">
-                        login</a
+                        Login</a
                     >
                 </div>
                 <button
                     type="button"
                     id="registerButton"
                     name="registerButton"
-                    class="py-2 px-8 my-8 rounded-md bg-blue-500 block mx-auto"
+                    class="py-2 px-8 my-8 rounded-md bg-blue-500 block mx-auto hover:underline"
                 >
                     Register
                 </button>
             </div>
+            <p id="message"></p>
         </form>
-        <p id="message"></p>
+        
         <script src="script/register.js"></script>
     </body>
 </html>

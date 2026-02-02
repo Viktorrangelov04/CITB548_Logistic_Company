@@ -3,20 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Company Dashboard</title>
     <link href="css/output.css" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="boxImage.png">
 </head>
 <body>
     <div class="bg-blue-500">
         <header class="w-4/5 mx-auto py-8 flex justify-between">
             <div>
-                <h1 class="text-2xl">Welcome to the admin dashboard</h1>
+                <p>Hello, <span id="userNameDisplay">Guest</span>!</p>
+                <h1 class="text-2xl">Welcome to the admin dashboard!</h1>
             </div>
             <nav>
-                <a href="addEmployee.html" class="px-8 py-2 border-1 border-black hover:bg-green-500">Add Employee</a>
-                <a href="createOffice.html" class="px-8 py-2 border-1 border-black hover:bg-green-500">Create office</a>
+                <a href="employeePortal.html" class="px-8 py-2 border-1 border-black rounded-md hover:bg-green-500">Employee Portal</a>
+                <a href="officePortal.html" class="px-8 py-2 border-1 border-black rounded-md hover:bg-green-500">Office Portal</a>
+                <a href="index.html" class="px-8 py-2 border-1 border-black rounded-md hover:bg-green-500">Return to Index</a>
             </nav>
         </header>
     </div>
+    <div class="w-4/5 mx-auto mt-8">
+
+    <h2 class="text-2xl inline">Employee List</h2>
+    <div id="employeeList" class="bg-gray-100 p-4 rounded"></div>
+    
+    <h2 class="text-2xl inline">Office List</h2>
+    <div id="officeList" class="bg-gray-100 p-4 rounded"></div>
+
+    </div>
+    <script src="script/employeeOperations.js"></script>
+    <script src="script/officeOperations.js"></script>
+    <script src="script/home.js"></script>
 </body>
 </html>

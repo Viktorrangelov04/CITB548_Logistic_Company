@@ -16,7 +16,7 @@
                 <h1 class="text-2xl">Welcome to your personal dashboard!</h1>
             </div>
             <nav>
-                <a href="sendOrder.html" class="px-8 py-2 border-1 border-black rounded-md hover:bg-green-500">Send an Order</a>
+                <a href="orderPortal.html" class="px-8 py-2 border-1 border-black rounded-md hover:bg-green-500">Order Portal</a>
                 <a href="index.html" class="px-8 py-2 border-1 border-black rounded-md hover:bg-green-500">Return to Index</a>
             </nav>
             </div>
@@ -29,18 +29,18 @@
         <div id="filters">
             <div id="type-filters" style="display: none;">
                 <h3>By types</h3>
-                <label><input type="radio" name="orderType" value="all" checked /> All</label>
-                <label><input type="radio" name="orderType" value="sent" /> Sent</label>
-                <label><input type="radio" name="orderType" value="received" /> Received</label>
+                <label><input type="radio" name="orderType" value="all" checked class="inline"/> All</label>
+                <label><input type="radio" name="orderType" value="sent" class="inline"/> Sent</label>
+                <label><input type="radio" name="orderType" value="received" class="inline"/> Received</label>
             </div>
 
             <div id="status-filters">
                 <h3>By status</h3>
-                <label><input type="radio" name="orderStatus" value="all" checked /> All</label>
-                <label><input type="radio" name="orderStatus" value="processing" /> Processing</label>
-                <label><input type="radio" name="orderStatus" value="shipping" /> Shipping</label>
-                <label><input type="radio" name="orderStatus" value="delivered" /> Delivered</label>
-                <label><input type="radio" name="orderStatus" value="pickedUp" /> Picked Up</label>
+                <label><input type="radio" name="orderStatus" value="all" checked class="inline"/> All</label>
+                <label><input type="radio" name="orderStatus" value="processing" class="inline"/> Processing</label>
+                <label><input type="radio" name="orderStatus" value="shipping" class="inline"/> Shipping</label>
+                <label><input type="radio" name="orderStatus" value="delivered" class="inline"/> Delivered</label>
+                <label><input type="radio" name="orderStatus" value="pickedUp" class="inline"/> Picked Up</label>
             </div>
 
         <button id="applyFiltersBtn">Apply Filters</button>

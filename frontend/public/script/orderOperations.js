@@ -1,94 +1,147 @@
-async function fetchOrders() {
-  const list = document.getElementById("ordersList");
-  list.innerHTML = "Loading orders...";
+document.addEventListener("DOMContentLoaded", () => {
+  const orderForm = document.getElementById("orderForm");
 
-  try {
-    const res = await fetch("http://localhost:3000/orders", {
-      credentials: "include",
+  const officeBox = document.getElementById("officeBox");
+  const addressBox = document.getElementById("addressBox");
+
+  const officeSelect = document.getElementById("offices");
+  const receiverSelect = document.getElementById("receiver");
+  const courierSelect = document.getElementById("courier");
+
+  const message = document.getElementById("message");
+
+  document.querySelectorAll('input[name="type"]').forEach((radio) => {
+    radio.addEventListener("change", () => {
+      if (radio.value === "office") {
+        officeBox.style.display = "block";
+        addressBox.style.display = "none";
+      } else {
+        officeBox.style.display = "none";
+        addressBox.style.display = "block";
+      }
     });
+  });
 
-    if (!res.ok) throw new Error("Failed to fetch orders");
+  loadOffices();
+  loadReceivers();
+  loadCouriers();
 
-    const orders = await res.json();
+  orderForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    await createOrder();
+  });
 
-    if (!orders.length) {
-      list.innerHTML = "<p>No orders found</p>";
-      return;
+  async function loadOffices() {
+    try {
+      const res = await fetch("http://localhost:3000/offices", {
+        credentials: "include",
+      });
+      const offices = await res.json();
+
+      officeSelect.innerHTML = "";
+
+      offices.forEach((office) => {
+        const option = document.createElement("option");
+        option.value = office._id;
+        option.textContent = `${office.name} – ${office.city}`;
+        officeSelect.appendChild(option);
+      });
+    } catch (err) {
+      officeSelect.innerHTML = `<option>Error loading offices</option>`;
+      console.error(err);
+    }
+  }
+
+  async function loadReceivers() {
+    try {
+      const res = await fetch("http://localhost:3000/users", {
+        credentials: "include",
+      });
+      const users = await res.json();
+
+      receiverSelect.innerHTML = "";
+
+      users.forEach((user) => {
+        const option = document.createElement("option");
+        option.value = user._id;
+        option.textContent = `${user.name} (${user.email})`;
+        receiverSelect.appendChild(option);
+      });
+    } catch (err) {
+      receiverSelect.innerHTML = `<option>Error loading receivers</option>`;
+      console.error(err);
+    }
+  }
+
+  async function loadCouriers() {
+    try {
+      const res = await fetch(
+        "http://localhost:3000/users?role=employee-courier",
+        { credentials: "include" },
+      );
+      const couriers = await res.json();
+
+      courierSelect.innerHTML = "";
+
+      couriers.forEach((courier) => {
+        const option = document.createElement("option");
+        option.value = courier._id;
+        option.textContent = courier.name;
+        courierSelect.appendChild(option);
+      });
+    } catch (err) {
+      courierSelect.innerHTML = `<option>Error loading couriers</option>`;
+      console.error(err);
+    }
+  }
+
+  async function createOrder() {
+    const type = document.querySelector('input[name="type"]:checked').value;
+    const weight = document.getElementById("weight").value;
+
+    const orderData = {
+      sender_id: null,
+      receiver_id: receiverSelect.value,
+      courier_id: courierSelect.value,
+      type,
+      weight,
+      address:
+        type === "address"
+          ? document.getElementById("address").value
+          : "Office delivery",
+      office: type === "office" ? officeSelect.value : null,
+    };
+
+    if (type === "office") {
+      orderData.office = officeSelect.value;
+    } else {
+      orderData.address = document.getElementById("address").value;
     }
 
-    list.innerHTML = orders
-      .map(
-        (order) => `
-        <div class="border p-2 mb-2 flex justify-between items-center">
-          <div>
-            <p><strong>Sender:</strong> ${order.sender?.name || "N/A"}</p>
-            <p><strong>Receiver:</strong> ${order.receiver?.name || "N/A"}</p>
-            <p><strong>Address:</strong> ${order.adress}</p>
-            <p><strong>Type:</strong> ${order.type}</p>
-            <p><strong>Status:</strong> ${order.status}</p>
-            <p><strong>Price:</strong> ${order.price}</p>
-          </div>
+    try {
+      const res = await fetch("http://localhost:3000/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(orderData),
+      });
 
-          <div class="flex gap-2">
-            <button 
-              class="edit-order px-2 bg-blue-500 rounded-md"
-              data-id="${order._id}">
-              Edit
-            </button>
+      const data = await res.json();
 
-            <button 
-              class="delete-order px-2 bg-red-500 rounded-md"
-              data-id="${order._id}">
-              Delete
-            </button>
-          </div>
-        </div>
-      `,
-      )
-      .join("");
+      if (!res.ok) {
+        throw new Error(data.message || "Order failed");
+      }
 
-    attachOrderButtons();
-  } catch (err) {
-    console.error(err);
-    list.innerHTML = `<p class="text-red-500">Error loading orders</p>`;
+      message.textContent = "Order created successfully!";
+      message.className = "text-green-600";
+
+      orderForm.reset();
+      officeBox.style.display = "none";
+      addressBox.style.display = "none";
+    } catch (err) {
+      message.textContent = err.message;
+      message.className = "text-red-500";
+      console.error(err);
+    }
   }
-}
-
-function attachOrderButtons() {
-  document.querySelectorAll(".delete-order").forEach((btn) => {
-    btn.addEventListener("click", async () => {
-      const id = btn.dataset.id;
-
-      if (!confirm("Delete this order?")) return;
-
-      await fetch(`http://localhost:3000/orders/${id}`, {
-        method: "DELETE",
-      });
-
-      fetchOrders();
-    });
-  });
-
-  document.querySelectorAll(".edit-order").forEach((btn) => {
-    btn.addEventListener("click", async () => {
-      const id = btn.dataset.id;
-
-      const newStatus = prompt(
-        "Enter new status (processing, shipping, delivered, received)",
-      );
-
-      if (!newStatus) return;
-
-      await fetch(`http://localhost:3000/orders/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ status: newStatus }),
-      });
-
-      fetchOrders();
-    });
-  });
-}
-fetchOrders();
+});

@@ -1,9 +1,16 @@
 import express from "express";
-import {getUserById, getUsersByRole, updateUserRole, deleteUser} from "../controllers/userController.js";
-import {verifyToken} from "../middleware/auth.js";
+import {
+  createUser,
+  getUserById,
+  getUsersByRole,
+  updateUserRole,
+  deleteUser,
+} from "../controllers/userController.js";
+import { verifyToken } from "../middleware/auth.js";
 
 const router = express.Router();
 
+router.post("/", createUser);
 router.get("/:id", getUserById);
 router.get("/", getUsersByRole);
 router.put("/:id", verifyToken, updateUserRole);

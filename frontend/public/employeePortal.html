@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Portal</title>
+    <link href="css/output.css" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="boxImage.png">
+</head>
+<body>
+    <div class="bg-blue-500">
+        <header class="w-4/5 mx-auto flex justify-between py-8">
+            <div>
+                <h1 class="text-2xl">Employee Management Portal</h1>
+            </div>
+            <nav>
+                <a href="homeAdmin.html" class="px-8 py-2 border-1 border-black rounded-md hover:bg-green-500">Home</a>
+                <a href="index.html" class="px-8 py-2 border-1 border-black rounded-md hover:bg-green-500">Return to Index</a>
+            </nav>
+        </header>
+    </div>
+    
+    <div class="w-4/5 mx-auto mt-8">
+
+    <div>
+        <h2 class="text-2xl text-center">Add New Employee</h2>
+
+        <form id="addEmployeeForm" class="block text-center">
+            <input type="text" id="employeeName" placeholder="Name" class="border-1 border-black" required>
+            <input type="email" id="employeeEmail" placeholder="Email" class="border-1 border-black" required>
+            <input type="password" id="employeePassword" placeholder="Password" class="border-1 border-black" required>
+            <button type="button" id="createEmployeeButton" class="py-2 rounded-md bg-blue-500 mx-auto hover:underline">Add Employee</button>
+            
+            <div class="mt-2">
+                <span>Employee Type:</span>
+                <label>
+                    <input type="radio" name="employeeRole" value="employee-office" checked>
+                    Regular
+                </label>
+                <label>
+                    <input type="radio" name="employeeRole" value="employee-courier">
+                    Courier
+                </label>
+            </div>
+            <p id="message"></p>
+        </form>
+    </div>
+
+    <h2 class="text-2xl text-center py-2">Find Employee</h2>
+    <div class="mb-4 text-center">
+        <input id="searchInput" type="text" placeholder="Search by name/email"
+         class="border-1 border-black">
+    </div>
+    <h2 class="text-2xl inline">Employee List</h2>
+    <div id="employeeList" class="bg-gray-100 p-4 rounded"></div>
+</div>
+<script src="script/employeeOperations.js"></script>
+<script src="script/orderOperations.js"></script>
+</body>
+
+</html>

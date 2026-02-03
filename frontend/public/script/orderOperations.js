@@ -99,8 +99,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const type = document.querySelector('input[name="type"]:checked').value;
     const weight = document.getElementById("weight").value;
 
+    const storedUserId = localStorage.getItem("userId");
+
     const orderData = {
-      sender_id: null,
+      sender_id: storedUserId,
       receiver_id: receiverSelect.value,
       courier_id: courierSelect.value,
       type,

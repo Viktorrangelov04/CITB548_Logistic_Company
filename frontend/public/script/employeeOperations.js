@@ -85,9 +85,10 @@ async function createEmployee() {
 
 // an event listener on the button to create an employee
 document.addEventListener("DOMContentLoaded", () => {
-  document
-    .getElementById("createEmployeeButton")
-    .addEventListener("click", createEmployee);
+  const createBtn = document.getElementById("createEmployeeButton");
+  if (createBtn) {
+    createBtn.addEventListener("click", createEmployee);
+  }
 });
 
 // display a list of all the employees currently present in the database + an option to edit/delete each employee
@@ -224,10 +225,16 @@ function editEmployee(id) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  fetchEmployees();
-});
+  const list = document.getElementById("employeeList");
+  if (list) {
+    fetchEmployees();
+  }
 
-document.getElementById("searchInput").addEventListener("input", (e) => {
-  const query = e.target.value.trim();
-  fetchEmployees(query);
+  const searchInput = document.getElementById("searchInput");
+  if (searchInput) {
+    searchInput.addEventListener("input", (e) => {
+      const query = e.target.value.trim();
+      fetchEmployees(query);
+    });
+  }
 });

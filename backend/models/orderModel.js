@@ -6,7 +6,7 @@ const orderSchema = new Schema({
   receiver: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   employee: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   office: { type: mongoose.Schema.Types.ObjectId, ref: "Office" },
-  adress: { type: String, required: [true, "Please enter address"] },
+  address: { type: String, required: [true, "Please enter address"] },
   weight: { type: String },
   status: {
     type: String,

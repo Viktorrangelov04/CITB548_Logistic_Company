@@ -1,4 +1,4 @@
-import Order from "../models/orderModel.js";
+import Order from "../models/orderModel.js";  
 
 export const getOrderById = async (req, res) => {
   const { id } = req.params;
@@ -31,11 +31,12 @@ export const getOrders = async (req, res) => {
 
     let query = {};
 
-    if (userRole === "employee") {
+    if (userRole.includes("employee") || userRole === "company") {
       if (status) {
         query.status = status;
       }
-    } else if (userRole === "user") {
+    } 
+    else if (userRole === "client") {
       const conditions = [];
 
       if (type === "sent") {
@@ -53,14 +54,22 @@ export const getOrders = async (req, res) => {
         query.status = status;
       }
     } else {
-      return res
-        .status(403)
-        .json({ message: "Unauthorized role to view orders" });
+      console.log("Role received:", userRole);
+      return res.status(403).json({ message: "Unauthorized role to view orders" });
     }
 
-    const orders = await Order.find(query)
-      .populate("sender", "name email")
-      .populate("receiver", "name email");
+    
+	const orders = await Order.find(query)
+	  .populate({
+	    path: 'sender',
+	    model: 'User', 
+	    select: 'name email'
+	  })
+	  .populate({
+	    path: 'receiver',
+	    model: 'User',
+	    select: 'name email'
+	  });
 
     res.status(200).json(orders);
   } catch (error) {
@@ -119,8 +128,8 @@ export const editOrderStatus = async (req, res) => {
   try {
     const updatedOrder = await Order.findByIdAndUpdate(
       id,
-      { status },
-      { new: true },
+      { status: status.toLowerCase() }, 
+      { new: true, runValidators: true }
     );
 
     if (!updatedOrder) {

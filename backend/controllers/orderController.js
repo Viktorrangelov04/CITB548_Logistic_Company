@@ -31,11 +31,11 @@ export const getOrders = async (req, res) => {
 
     let query = {};
 
-    if (userRole === "employee") {
+    if (userRole === "employee-office" || userRole === "employee-courier") {
       if (status) {
         query.status = status;
       }
-    } else if (userRole === "user") {
+    } else if (userRole === "client") {
       const conditions = [];
 
       if (type === "sent") {
@@ -73,7 +73,7 @@ export const createOrder = async (req, res) => {
   try {
     const { sender_id, receiver_id, address, weight, type, office } = req.body;
 
-    if (!sender_id || !receiver_id || !address || !weight || !type) {
+    if (!receiver_id || !address || !weight || !type) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 

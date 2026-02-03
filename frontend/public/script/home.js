@@ -124,9 +124,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   const userData = await displayUserName();
 
   if (userData) {
-    if (currentUserRole === "user") {
+    if (currentUserRole === "client") {
       typeFiltersContainer.style.display = "block";
-    } else if (currentUserRole === "employee") {
+    } else if (
+      currentUserRole === "employee-office" ||
+      currentUserRole === "employee-courier"
+    ) {
     } else {
       console.warn("Unknown user role:", currentUserRole);
     }

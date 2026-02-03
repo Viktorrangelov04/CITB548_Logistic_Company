@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function loadOffices() {
     try {
-      const res = await fetch("http://localhost:3000/offices", {
+      const res = await fetch("http://localhost:3000/office", {
         credentials: "include",
       });
       const offices = await res.json();
@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
       offices.forEach((office) => {
         const option = document.createElement("option");
         option.value = office._id;
-        option.textContent = `${office.name} – ${office.city}`;
+        option.textContent = `${office.address}`;
         officeSelect.appendChild(option);
       });
     } catch (err) {

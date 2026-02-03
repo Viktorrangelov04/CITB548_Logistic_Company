@@ -1,140 +1,156 @@
 import Order from "../models/orderModel.js";
 
 export const getOrderById = async (req, res) => {
-    const { id } = req.params;
-    if (!id) return res.status(400).json({ message: "Missing order ID" });
+  const { id } = req.params;
 
-    try {
-        const order = await Order.findById(id);
-        if (!order) return res.status(404).json({ message: "Order not found" });
+  if (!id) {
+    return res.status(400).json({ message: "Missing order ID" });
+  }
 
-        res.status(200).json(order);
-    } catch {
-        res.status(500).json({ message: "Server error" });
+  try {
+    const order = await Order.findById(id)
+      .populate("sender", "name email")
+      .populate("receiver", "name email");
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
     }
+
+    res.status(200).json(order);
+  } catch (error) {
+    console.error("Get order by id error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
 };
 
 export const getOrders = async (req, res) => {
   try {
     const currentUserId = req.entity.id;
     const userRole = req.entity.type;
-    const status = req.query.status; 
-    const type = req.query.type;
+    const { status, type } = req.query;
 
     let query = {};
 
-    if (userRole === 'employee') {
+    if (userRole === "employee") {
       if (status) {
         query.status = status;
       }
-    } else if (userRole === 'user') { 
-      const userSpecificConditions = [];
+    } else if (userRole === "user") {
+      const conditions = [];
 
-      if (type === 'sent') {
-        userSpecificConditions.push({ sender: currentUserId });
-      } else if (type === 'received') {
-        userSpecificConditions.push({ receiver: currentUserId });
-      } else { 
-        userSpecificConditions.push({ sender: currentUserId });
-        userSpecificConditions.push({ receiver: currentUserId });
+      if (type === "sent") {
+        conditions.push({ sender: currentUserId });
+      } else if (type === "received") {
+        conditions.push({ receiver: currentUserId });
+      } else {
+        conditions.push({ sender: currentUserId });
+        conditions.push({ receiver: currentUserId });
       }
 
-      if (userSpecificConditions.length > 0) {
-        query.$or = userSpecificConditions;
-      }
+      query.$or = conditions;
 
       if (status) {
-        query.status = status; 
+        query.status = status;
       }
     } else {
-      return res.status(403).json({ message: 'Unauthorized role to view orders' });
+      return res
+        .status(403)
+        .json({ message: "Unauthorized role to view orders" });
     }
 
     const orders = await Order.find(query)
-      .populate('sender', 'name email')
-      .populate('receiver', 'name email');
-
-    if (!orders || orders.length === 0) {
-      return res.status(404).json({ message: 'No orders found.' });
-    }
+      .populate("sender", "name email")
+      .populate("receiver", "name email");
 
     res.status(200).json(orders);
   } catch (error) {
-    console.error('Error fetching orders:', error);
-    res.status(500).json({ message: 'Internal server error.' });
+    console.error("Error fetching orders:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
 export const createOrder = async (req, res) => {
+  try {
+    const { sender_id, receiver_id, address, weight, type, office } = req.body;
+
+    if (!sender_id || !receiver_id || !address || !weight || !type) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+
     const newOrder = new Order({
-        sender: req.body.sender_id,
-        receiver: req.body.receiver_id,
-        adress: req.body.adress,
-        weight: req.body.weight,
-        type: req.body.type,
+      sender: sender_id,
+      receiver: receiver_id,
+      address,
+      weight,
+      type,
+      office: office || null,
     });
-    if(newOrder.type="office"){
-        newOrder.price=newOrder.weight/200
-    }else if(newOrder.type="adress"){
-        newOrder.price=newOrder.weight/175
-    }else{
-        return res.status(400).json({
-        message: "Invalid or missing order type. Type must be 'office' or 'adress'.",
-        });
+
+    if (type === "office") {
+      newOrder.price = weight / 200;
+    } else if (type === "address") {
+      newOrder.price = weight / 175;
+    } else {
+      return res.status(400).json({
+        message: "Invalid order type. Must be 'office' or 'address'",
+      });
     }
-    
-    try {
-        const savedOrder = await newOrder.save();
-        res.status(201).json({
-            msasage: "order saved successfully",
-            order: savedOrder,
-        });
-    } catch {
-        res.status(500).json({ message: "failed to save order" });
-    }
+
+    const savedOrder = await newOrder.save();
+
+    res.status(201).json({
+      message: "Order created successfully",
+      order: savedOrder,
+    });
+  } catch (error) {
+    console.error("Create order error:", error);
+    res.status(500).json({ message: "Failed to create order" });
+  }
 };
 
 export const editOrderStatus = async (req, res) => {
-    const { id } = req.params;
-    const { status } = req.body;
+  const { id } = req.params;
+  const { status } = req.body;
 
-    if (!id || !status) {
-        return res.status(400).json({ message: "Missing order ID or status" });
+  if (!id || !status) {
+    return res.status(400).json({ message: "Missing order ID or status" });
+  }
+
+  try {
+    const updatedOrder = await Order.findByIdAndUpdate(
+      id,
+      { status },
+      { new: true },
+    );
+
+    if (!updatedOrder) {
+      return res.status(404).json({ message: "Order not found" });
     }
 
-    try {
-        const updatedOrder = await Order.findByIdAndUpdate(
-            id,
-            { status },
-            { new: true }
-        );
-        if (!updatedOrder) {
-            return res.status(404).json({ message: "Order not found" });
-        }
-
-        res.status(200).json(updatedOrder);
-    } catch (err) {
-        console.error("Failed to edit order:", err.message);
-        res.status(500).json({ message: "Server error" });
-    }
+    res.status(200).json(updatedOrder);
+  } catch (error) {
+    console.error("Edit order error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
 };
 
 export const deleteOrder = async (req, res) => {
-    const { id } = req.params;
-    if (!id) {
-        return res.status(400).json({ message: "Missing order ID" });
+  const { id } = req.params;
+
+  if (!id) {
+    return res.status(400).json({ message: "Missing order ID" });
+  }
+
+  try {
+    const deletedOrder = await Order.findByIdAndDelete(id);
+
+    if (!deletedOrder) {
+      return res.status(404).json({ message: "Order not found" });
     }
 
-    try {
-        const deletedOrder = await Order.findByIdAndDelete(id);
-
-        if (!deletedOrder) {
-            return res.status(404).json({ message: "Order not found" });
-        }
-
-        res.status(200).json({ message: "Order deleted successfully" });
-    } catch (err) {
-        console.error("Failed to delete order:", err.message);
-        res.status(500).json({ message: "Server error" });
-    }
+    res.status(200).json({ message: "Order deleted successfully" });
+  } catch (error) {
+    console.error("Delete order error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
 };

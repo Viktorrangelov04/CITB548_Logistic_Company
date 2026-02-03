@@ -28,10 +28,11 @@ POST http://localhost:3000/orders/
 Content-type: application/json
 
 {
-    "sender_id": "69356c8772ae175f0fa88e5a",
-    "receiver_id": "6938c32f2f848eb455315777",
-    "adress": "asd",
-    "weight": "1000"
+    "sender_id": "69824dd8ad11f8bd1fac15b8",
+    "receiver_id": "69824bb7a9902ae585b8287f",
+    "address": "asd",
+    "weight": "1000",
+    "type": "address"
 }
 
 ###

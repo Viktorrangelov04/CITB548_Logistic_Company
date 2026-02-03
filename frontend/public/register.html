@@ -5,87 +5,148 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Register</title>
         <link href="css/output.css" rel="stylesheet" />
-        <link rel="icon" type="image/x-icon" href="boxImage.png">
+        <link rel="icon" type="image/x-icon" href="boxImage.png" />
     </head>
-    <body>
-        <div class="bg-blue-500">
-        <header class="w-4/5 mx-auto py-8 flex justify-between">
-            <div>
-                <h1 class="text-2xl">Welcome to the Register Portal!</h1>
-                
-            </div>
-            <nav>
-            <a href="login.html" class="px-8 py-2 border-1 border-black rounded-md hover:bg-green-500">Already have an account? Login!</a>
-            <a href="index.html" class="px-8 py-2 border-1 border-black rounded-md hover:bg-green-500">Return to Index</a>
-            </nav>
-        </header>
-        </div>
-        <h1 class="text-3xl text-center my-8">Register</h1>
-
-        <form class="text-center">
-            <div>
-                <label for="email" class="block">Email</label>
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    class="border-1 border-black"
-                    placeholder="mail@example.com"
-                    required
-                />
-                <label for="password" class="block">Password</label>
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    class="border-1 border-black"
-                    required
-                />
-                <label for="name" class="block">Name</label>
-                <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    class="border-1 border-black"
-                    required
-                />
-                <div>
-                    <input
-                        type="radio"
-                        id="userAccount"
-                        name="accountType"
-                        value="user"
-                        checked
-                    />
-                    <label for="userAccount">Personal User</label>
-                </div>
-                <div>
-                    <input
-                        type="radio"
-                        id="companyAccount"
-                        name="accountType"
-                        value="company"
-                    />
-                    <label for="companyAccount">Company Account</label>
-                </div>
-                <div>
-                    <p class="inline">Already have an account?</p>
-                    <a href="login.html" class="text-blue-300 hover:underline">
-                        Login</a
+    <body class="bg-gray-50 min-h-screen font-sans">
+        <header class="bg-blue-600 shadow-md">
+            <div
+                class="max-w-6xl mx-auto px-6 py-6 flex flex-col md:flex-row justify-between items-center text-white"
+            >
+                <h1 class="text-xl font-bold tracking-tight mb-4 md:mb-0">
+                    Welcome to the Register Portal!
+                </h1>
+                <nav class="flex gap-4">
+                    <a
+                        href="login.html"
+                        class="px-4 py-2 border border-white rounded-md hover:bg-white hover:text-blue-600 transition duration-300"
+                        >Already have an account? Login!</a
                     >
-                </div>
-                <button
-                    type="button"
-                    id="registerButton"
-                    name="registerButton"
-                    class="py-2 px-8 my-8 rounded-md bg-blue-500 block mx-auto hover:underline"
-                >
-                    Register
-                </button>
+                    <a
+                        href="index.html"
+                        class="px-4 py-2 bg-blue-700 rounded-md hover:bg-blue-800 transition duration-300"
+                        >Return to Index</a
+                    >
+                </nav>
             </div>
-            <p id="message"></p>
-        </form>
-        
+        </header>
+
+        <main class="flex items-center justify-center py-12 px-4">
+            <div
+                class="max-w-md w-full bg-white shadow-xl rounded-xl p-8 border border-gray-100"
+            >
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">
+                    Register
+                </h2>
+
+                <form class="space-y-6">
+                    <div>
+                        <label
+                            for="email"
+                            class="block text-sm font-medium text-gray-700 mb-1"
+                            >Email Address</label
+                        >
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                            placeholder="mail@example.com"
+                            required
+                        />
+                    </div>
+
+                    <div>
+                        <label
+                            for="password"
+                            class="block text-sm font-medium text-gray-700 mb-1"
+                            >Password</label
+                        >
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                            required
+                        />
+                    </div>
+
+                    <div>
+                        <label
+                            for="name"
+                            class="block text-sm font-medium text-gray-700 mb-1"
+                            >Name</label
+                        >
+                        <input
+                            type="name"
+                            id="name"
+                            name="name"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                            required
+                        />
+                    </div>
+
+                    <div
+                        class="bg-gray-50 p-4 rounded-lg border border-gray-200"
+                    >
+                        <p
+                            class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3"
+                        >
+                            Account Type
+                        </p>
+                        <div class="flex items-center gap-6">
+                            <label class="flex items-center cursor-pointer">
+                                <input
+                                    type="radio"
+                                    id="userAccount"
+                                    name="accountType"
+                                    value="user"
+                                    checked
+                                    class="w-4 h-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+                                />
+                                <span class="ml-2 text-sm text-gray-700"
+                                    >Personal User</span
+                                >
+                            </label>
+                            <label class="flex items-center cursor-pointer">
+                                <input
+                                    type="radio"
+                                    id="companyAccount"
+                                    name="accountType"
+                                    value="company"
+                                    class="w-4 h-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+                                />
+                                <span class="ml-2 text-sm text-gray-700"
+                                    >Company Account</span
+                                >
+                            </label>
+                        </div>
+                    </div>
+
+                    <button
+                        type="button"
+                        id="registerButton"
+                        class="w-full py-3 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 shadow-md transition duration-300"
+                    >
+                        Register
+                    </button>
+
+                    <p
+                        id="message"
+                        class="text-center text-sm font-medium min-h-[1.25rem]"
+                    ></p>
+
+                    <div class="text-center text-sm text-gray-500 pt-2">
+                        Already have an account?
+                        <a
+                            href="login.html"
+                            class="text-blue-600 font-semibold hover:underline"
+                            >Login</a
+                        >
+                    </div>
+                </form>
+            </div>
+        </main>
+
         <script src="script/register.js"></script>
     </body>
 </html>

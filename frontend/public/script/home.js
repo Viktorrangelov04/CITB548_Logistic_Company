@@ -185,17 +185,16 @@ function setupEventListeners() {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-    const userData = await displayUserName();
+  const userData = await displayUserName();
 
-    if (userData) {
-        if (currentUserRole === "user" && typeFiltersContainer) {
-            typeFiltersContainer.style.display = "block";
-        }
-
-        setupEventListeners();
-
-        if (orderList) {
-            fetchOrders();
-        }
+  if (userData) {
+    if (currentUserRole === "client") {
+      typeFiltersContainer.style.display = "block";
+    } else if (
+      currentUserRole === "employee-office" ||
+      currentUserRole === "employee-courier"
+    ) {
+    } else {
+      console.warn("Unknown user role:", currentUserRole);
     }
 });

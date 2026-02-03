@@ -40,7 +40,7 @@ PUT http://localhost:3000/users/68fa57eaa1a3340fa0602112
 Content-type: application/json
 
 {
-    "role":"user"
+    "role":"client"
 }
 
 

@@ -76,7 +76,7 @@ async function fetchOffices(query = "") {
           <strong>Address:</strong> ${office.address}
         </div>
         <div>
-          <button class="delete-btn px-2 bg-red-500 hover:underline rounded-md" data-id="${office._id}">Delete</button>
+          <button class="delete-office-btn px-2 bg-red-500 hover:underline rounded-md" data-id="${office._id}">Delete</button>
         </div>
       </div>
     `,
@@ -115,7 +115,7 @@ async function deleteOffice(id) {
 }
 
 function attachOfficeButtons() {
-  const deleteButtons = document.querySelectorAll(".delete-btn");
+  const deleteButtons = document.querySelectorAll(".delete-office-btn");
   deleteButtons.forEach((btn) =>
     btn.addEventListener("click", (e) => {
       const id = e.target.dataset.id;

@@ -5,8 +5,19 @@ const orderSchema = new Schema({
   sender: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   receiver: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   employee: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-  office: { type: mongoose.Schema.Types.ObjectId, ref: "Office" },
-  address: { type: String, required: [true, "Please enter address"] },
+  office: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Office",
+    required: function () {
+      return this.type === "office";
+    },
+  },
+  address: {
+    type: String,
+    required: function () {
+      return this.type === "address";
+    },
+  },
   weight: { type: String },
   status: {
     type: String,

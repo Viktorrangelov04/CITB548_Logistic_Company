@@ -133,7 +133,7 @@ async function fetchEmployees(query = "") {
         </div>
         <div>
           <button class="edit-btn px-2 bg-blue-500 hover:underline rounded-md" data-id="${emp._id}" data-role="${emp.role}">Edit</button>
-          <button class="delete-btn px-2 bg-red-500 hover:underline rounded-md" data-id="${emp._id}">Delete</button>
+          <button class="delete-emp-btn px-2 bg-red-500 hover:underline rounded-md" data-id="${emp._id}">Delete</button>
         </div>
       </div>
     `,
@@ -151,11 +151,11 @@ async function fetchEmployees(query = "") {
 }
 
 function attachEmployeeButtons() {
-  const deleteButtons = document.querySelectorAll(".delete-btn");
+  const deleteButtons = document.querySelectorAll(".delete-emp-btn");
   const editButtons = document.querySelectorAll(".edit-btn");
 
   if (deleteButtons.length === 0 && editButtons.length === 0) return;
-  document.querySelectorAll(".delete-btn").forEach((btn) =>
+  document.querySelectorAll(".delete-emp-btn").forEach((btn) =>
     btn.addEventListener("click", async (e) => {
       const id = e.target.dataset.id;
       if (confirm("Are you sure you want to delete this employee?")) {

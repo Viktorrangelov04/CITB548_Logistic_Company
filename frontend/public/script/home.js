@@ -238,7 +238,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (userData) {
         if (currentUserRole === "client") {
-            typeFiltersContainer.style.display = "block";
+            //typeFiltersContainer.style.display = "block";
         } else if (
             currentUserRole === "employee-office" ||
             currentUserRole === "employee-courier"

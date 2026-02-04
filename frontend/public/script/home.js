@@ -90,6 +90,9 @@ async function fetchOrders() {
                     order.receiver?.name ||
                     order.receiver_id?.name ||
                     "Unknown";
+                const rawPrice =
+                    order.price?.$numberDecimal || order.price || 0;
+                const formattedPrice = Number(rawPrice).toFixed(2);
 
                 const isEmployee =
                     currentUserRole === "employee-office" ||
@@ -111,14 +114,47 @@ async function fetchOrders() {
                     : `<span class="status-tag">${order.status}</span>`;
 
                 return `
-            <div class="order-item p-4 border mb-2 rounded shadow-sm flex justify-between items-center">
-                <div class="order-details">
-                    <p><strong>From:</strong> ${senderName}</p>
-                    <p><strong>To:</strong> ${receiverName}</p>
-                    <p><strong>Status:</strong> ${statusHtml}</p>
-                </div>
+    <div class="order-item p-6 border mb-4 rounded-xl shadow-sm bg-white hover:shadow-md transition flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div class="order-main space-y-1 flex-1">
+            <div class="flex items-center gap-2 mb-2">
+                <span class="text-xs font-bold uppercase px-2 py-0.5 rounded bg-blue-100 text-blue-700">
+                    ${order.type}
+                </span>
+                <span class="text-xs text-gray-400">ID: ${order._id.slice(
+                    -6
+                )}</span>
             </div>
-        `;
+            <p class="text-sm"><strong>From:</strong> ${senderName}</p>
+            <p class="text-sm"><strong>To:</strong> ${receiverName}</p>
+            <p class="text-sm text-gray-600">
+                <strong>Destination:</strong> 
+                ${
+                    order.type === "office"
+                        ? order.office?.name || "Office Pickup"
+                        : order.address
+                }
+            </p>
+        </div>
+
+        <div class="order-stats grid grid-cols-2 md:flex md:flex-col items-end gap-4 w-full md:w-auto border-t md:border-t-0 pt-4 md:pt-0">
+            <div class="text-left md:text-right">
+                <p class="text-xs text-gray-400 uppercase font-bold">Price</p>
+                <p class="text-lg font-bold text-green-600">
+                    €${formattedPrice}
+                </p>
+            </div>
+            <div class="text-right">
+                <p class="text-xs text-gray-400 uppercase font-bold">Weight</p>
+                <p class="text-sm font-semibold">${order.weight} kg</p>
+            </div>
+        </div>
+
+        <div class="order-status min-w-[140px] text-right">
+            <p class="text-xs text-gray-400 uppercase font-bold mb-1">Status</p>
+            ${statusHtml}
+        </div>
+    </div>
+`;
             })
             .join("");
 
